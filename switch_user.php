@@ -71,7 +71,34 @@ class modules_switch_user {
 			$css = Dataface_CSSTool::getInstance();
 			$css->addPath(dirname(__FILE__).DIRECTORY_SEPARATOR.'css', $this->getBaseURL().'/css');
 			$js->import('xataface/modules/switch_user/switch_user.js');
-			
+                        $strs = array(
+                            'switch_user.label.logged_in_as' => 'Logged in as <span id="switch-user-username">&nbsp;</span>.',
+                            'switch_user.label.switch_user' => 'Switch User',
+                            'switch_user.message.enter_username' => 'Please enter the name of the user you wish to switch to.',
+                            'switch_user.message.are_you_sure' => 'Are you sure you want to exit this user account and return to your own account?',
+                            'switch_user.label.username' => 'Username'
+                        );
+                        
+                        foreach ( $strs as $k=>$v){
+                            
+                            $strs[$k] = df_translate($k, $v);
+                        }
+                        
+                        Dataface_Application::getInstance()->addHeadContent(
+                                '<script>
+                                (function(){
+                                    var strings = '.json_encode($strs).';
+                                    window.xataface = window.xataface || {};
+                                    window.xataface.strings = window.xataface.strings || {};
+                                    for ( var i in strings ){
+                                        window.xataface.strings[i] = strings[i];
+                                    }
+                                })();
+                                </script>'
+                        );
+                                
+                        
+                        
 		}
 		
 	}

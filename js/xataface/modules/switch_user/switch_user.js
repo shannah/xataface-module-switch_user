@@ -26,13 +26,27 @@
 
 (function(){
 	
+        // A convenience method to load strings that were provided in the switch_user module.
+        function _(key,defaultValue){
+            if ( xataface && xataface.strings && xataface.strings[key] ){
+                return xataface.strings[key];
+            } else {
+                return defaultValue;
+            }
+        }
+        
 	var initSwitchUser;
 	var $ = jQuery;
 	jQuery(document).ready(function($){
 		
 		var userbar = document.createElement('div');
 		$(userbar).attr('id', 'switch-user-menu');
-		$(userbar).html('Logged in as <span id="switch-user-username">&nbsp;</span>. <a href="#" id="switch-user-btn" title="Switch User"><span>Switch User</span></a>');
+		$(userbar).html(_('switch_user.label.logged_in_as','Logged in as <span id="switch-user-username">&nbsp;</span>.')+
+                        ' <a href="#" id="switch-user-btn" title="'+
+                        _('switch_user.label.switch_user', 'Switch User')+
+                        '"><span>'+
+                        _('switch_user.label.switch_user','Switch User')+
+                        '</span></a>');
 		var usernameSpan = $('#switch-user-username', userbar).get(0);
 		var switchUserBtn = $('#switch-user-btn', userbar).get(0);
 		var isOriginalUser = true;
@@ -91,14 +105,17 @@
 		
 		$(switchUserBtn).click(function(){
 			if ( isOriginalUser ){
-				var user = prompt('Please enter the name of the user you wish to switch to.', 'Username');
+				var user = prompt(
+                                        _('switch_user.message.enter_username','Please enter the name of the user you wish to switch to.'), 
+                                        _('switch_user.label.username', 'Username')
+                                    );
 				if ( user ){
 					switchUser(user);
 				}
 				
 				
 			} else {
-				if ( confirm('Are you sure you want to exit this user account and return to your own account?') ){
+				if ( confirm(_('switch_user.message.are_you_sure', 'Are you sure you want to exit this user account and return to your own account?')) ){
 					restoreToOriginalUser();
 				}
 			}

@@ -54,13 +54,16 @@ class actions_switch_user {
 				unset($_SESSION['original_user']);
 				$this->response(array(
 					'code'=>200,
-					'msg'=>'Successfully restored user to '.$_SESSION['UserName']
+					'msg'=>sprintf(
+					    df_translate('switch_user.message.restored_user','Successfully restored user to %s'),
+					    $_SESSION['UserName']
+					)
 				));
 				exit;
 			} else {
 				$this->response(array(
 					'code'=>500,
-					'msg'=>'Failed to restore user because there was no original user to restore to.'
+					'msg'=>df_translate('switch_user.error.failed_to_restore_user','Failed to restore user because there was no original user to restore to.')
 				));
 				exit;
 			}
@@ -69,21 +72,21 @@ class actions_switch_user {
 			if ( !(isset($del) and method_exists($del, 'canSwitchUser') and $del->canSwitchUser()) ){
 				$this->response(array(
 					'code'=>500,
-					'msg'=>'Failed to change to different user because this action is reserved for administrators only.'
+					'msg'=>df_translate('switch_user.error.failed_to_change_user_admin_only','Failed to change to different user because this action is reserved for administrators only.')
 				));
 			}
 			
 			if ( !@$_POST['--username'] ){
 				$this->response(array(
 					'code'=>500,
-					'msg'=>'Failed to change to different user because no username was included in the request.'
+					'msg'=>df_translate('switch_user.error.failed_to_change_user_no_username','Failed to change to different user because no username was included in the request.')
 				));
 			}
 			
 			if ( @$_SESSION['original_user'] ){
 				$this->response(array(
 					'code'=>500,
-					'msg'=>'Please return to your original user account before changing to a different account.'
+					'msg'=>df_translate('switch_user.error.change_to_original_first','Please return to your original user account before changing to a different account.')
 				));
 			}
 			
@@ -91,7 +94,10 @@ class actions_switch_user {
 			$_SESSION['UserName'] = $_POST['--username'];
 			$this->response(array(
 				'code'=>200,
-				'msg'=>'Successfully changed user to '.$_POST['--username']
+				'msg'=>sprintf(
+				    df_translate('switch_user.message.changed_user','Successfully changed user to %s'),
+				    $_POST['--username']
+				)
 			));
 		}
 	}
